@@ -1,0 +1,9 @@
+sequenceDiagram
+    participant Tx1 as Transaction 1
+    participant Data as Data Item
+    participant Tx2 as Transaction 2
+
+    Tx1->>Data: Start transaction (with versioning)
+    Tx2->>Data: Start writing data
+    Tx1->>Data: Read older version of data
+    Tx2->>Data: Commit changes

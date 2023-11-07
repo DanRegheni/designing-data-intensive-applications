@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant T1 as Transaction T1
+    participant T2 as Transaction T2
+    participant A as Account A
+    participant B as Account B
+
+    T1->>A: Start transaction
+    T1->>A: Read balance
+    A-->>T1: $100
+    T1->>A: Deduct $50
+    A-->>T1: $50
+    T1->>B: Add $50
+    B-->>T1: $150
+    T1->>A: Commit
+
+    T2->>A: Start transaction
+    T2->>B: Read balance
+    B-->>T2: $150
+    T2->>B: Deduct $30
+    B-->>T2: $120
+    T2->>A: Commit

@@ -1,0 +1,37 @@
+sequenceDiagram
+    participant T1 as Transaction T1
+    participant T2 as Transaction T2
+    participant A as Account A
+    participant B as Account B
+
+    T1->>A: Acquire read lock
+    T1->>A: Read balance
+    A-->>T1: $100
+    T1->>A: Upgrade to write lock
+    T1->>A: Deduct $50
+    A-->>T1: $50
+
+    T2->>A: Request read lock (blocked by T1)
+    T2->>B: Acquire read lock
+    T2->>B: Read balance
+    B-->>T2: $100
+    T2->>B: Upgrade to write lock
+    T2->>B: Add $30
+    B-->>T2: $130
+    T2->>B: Release lock
+
+    T1->>B: Acquire read lock
+    T1->>B: Read balance
+    B-->>T1: $130
+    T1->>B: Upgrade to write lock
+    T1->>B: Add $50
+    B-->>T1: $180
+
+    T1->>A: Release lock on A
+    T1->>B: Release lock on B
+    T1->>A: Commit
+
+    T2->>A: Acquire read lock (now unblocked)
+    T2->>A: Continue operations...
+    T2->>A: Release lock on A
+    T2->>A: Commit

@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant Tx1 as Transaction 1
+    participant Data as Data Item
+    participant Tx2 as Transaction 2
+
+    Tx1->>Data: Request shared lock to read
+    Note over Tx1,Data: Shared lock acquired
+    Tx2-xData: Try to write (blocked due to shared lock)
+    Tx1->>Data: Finish reading and release shared lock
+    Tx2->>Data: Write data
+    Tx1->>Data: Request shared lock to read again
+    Note over Tx1,Data: Shared lock acquired
+    Tx1->>Data: Finish reading and release shared lock

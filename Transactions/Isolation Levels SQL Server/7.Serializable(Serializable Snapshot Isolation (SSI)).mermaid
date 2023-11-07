@@ -1,0 +1,30 @@
+sequenceDiagram
+    participant T1 as Transaction T1
+    participant T2 as Transaction T2
+    participant A as Account A
+    participant B as Account B
+
+    T1->>A: Start transaction with snapshot
+    T2->>B: Start transaction with snapshot
+
+    T1->>A: Read balance from snapshot
+    A-->>T1: $100
+    T1->>A: Deduct $50
+    A-->>T1: $50 (in snapshot)
+
+    T2->>B: Read balance from snapshot
+    B-->>T2: $100
+    T2->>B: Deduct $30
+    B-->>T2: $70 (in snapshot)
+
+    T1->>B: Read balance from snapshot
+    B-->>T1: $100
+    T1->>B: Add $50
+    B-->>T1: $150 (in snapshot)
+
+    T1->>A: Attempt to commit
+    Note over T1, A: Detects potential conflict with T2's changes
+    T1->>A: Commit failed
+    T1->>A: Rollback
+
+    T2->>A: Commit

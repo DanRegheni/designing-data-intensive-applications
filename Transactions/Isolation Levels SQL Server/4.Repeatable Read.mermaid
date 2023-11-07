@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant Tx1 as Transaction 1
+    participant Data as Data Item
+    participant Tx2 as Transaction 2
+
+    Tx1->>Data: Read data & hold shared lock
+    Tx2-xData: Try write (blocked by Tx1's lock)
+    Tx1->>Data: Re-read data (consistent due to lock)
+    Tx1->>Data: Commit & release lock
+    Tx2->>Data: Write data

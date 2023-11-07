@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant Tx1 as Transaction 1
+    participant Data as Data Item
+    participant Tx2 as Transaction 2
+
+    Tx1->>Data: Start writing data
+    Tx2->>Data: Read data (even if uncommitted)
+    Tx1->>Data: Commit/Rollback
